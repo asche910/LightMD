@@ -1,0 +1,230 @@
+
+比如说操作系统，应该把精力主要放在进程管理与调度、内存管理、并发编程与同步、高效的IO等等，
+而不要过于投入到初始化（从 BIOS 加载引导扇区、设置 GDT、进入保护模式）这种一次性任务上.
+再比方说《计算机网络》，关键之一是理解如何在底层有丢包、重包、乱序的条件下设计出可靠的网络协议，这不算难。
+难一点的是这个可靠协议能达到“既能充分利用带宽，又能做到足够公平（并发连接大致平均分享带宽）”
+
+
+114.115.157.55
+
+
+
+// 下载github上仓库某个目录
+// 比如 https://github.com/asche910/WeTalk/tree/master/app (tree/master替换为trunk)
+svn checkout https://github.com/asche910/WeTalk/trunk/app
+
+
+// cmd 中使用代理(设置环境变量)
+set http_proxy=http://127.0.0.1:1080
+set https_proxy=http://127.0.0.1:1080
+
+
+
+// 清除dns缓存
+ipconfig /flushdns
+
+
+
+会导致并发错误
+for (IPBean ipBean : ipBeans) {
+   ipBeans.remove(ipBean);      
+}
+
+
+java中list.remove(obj)方法中， obj必须为list中的引用才有效，拷贝的无法remove
+
+
+jsoup css选择器语法中，不能有空格
+div.tableNormal
+
+
+
+sshd
+d at the end of some process means daemon.
+
+
+
+nslookup、tracert、telnet
+
+
+
+自顶向下学习，先用 gin 和 数据库 driver 写个 web。Go 的 web 框架都很简单，gin 就像是 nodejs 的 express。上手以后可以再去研究研究 gin 的源代码
+
+
+
+
+Should pass resolved color instead of resource id here: getResources().getColor(R.color.background)
+
+
+
+		Log.e(TAG, "onCreate: " + (fragmentList.get(1) == null) );
+        fragmentDiscover = new FragmentDiscover();
+        Log.e(TAG, "onCreate: " + (fragmentList.get(1) == null) );
+		// 两次皆为空
+
+
+
+分布式学习，RMI， EJB等
+
+
+服务外包：
+
+
+首页滑动事件冲突与recyclerview滑动监听
+
+
+onBindViewHolder -> viewHolder中图片宽高为0
+
+
+ SimpleTarget<Drawable>有些item为0；有些正常、有些宽高比例有问题
+ 
+ 
+ 
+ recyclerView 复用导致的各种bug（如图片和文本的可见性、数据错位）
+ 
+ 
+ 不要在回调函数中传递类似MotionEvent这种实时变化的对象
+ 
+ 
+ 
+ onCreateViewHolder创建几次就停止了,ScrollView导致
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+curl https://www.bilibili.com/video/av19933651/?spm_id_from=333.334.bili_douga.4
+// 流请求为乱码？？
+
+
+// ssh远程登录
+ssh -l as_ 94.191.31.231 
+// mysql远程登录
+mysql -h 192.168.5.116 -P 3306 -u root -p
+
+tar -zxvf jdk-8u101-linux-x64.tar.gz -C /usr/java/
+
+
+
+这个代表不捕获分组
+比较(X)和(?:X)，前者是捕获分组，后者不捕获，区别在于正则表达式匹配输入字符串之后所获得的匹配的（数）组当中没有(?:X)匹配的部分；
+
+
+
+"...Only alphanumerics [0-9a-zA-Z], the special characters "$-_.+!*'()," [not including the quotes - ed], and reserved characters used for their reserved purposes may be used unencoded within a URL."
+
+
+InputStream子类           数据源类型
+ByteArrayInputStream     包含一个内存缓冲区，字节从中取出。
+FileInputStream          从文件中获得字节。
+ObjectInputStream        用来恢复被序列化的对象。
+PipedInputStream         管道输入流，读取管道内容。多和PipedOutputStream一起用于多线程通信。
+SequenceInputStream      是多种输入流的逻辑串联，从第一个输入流读取，直到最后一个输入流。
+StringBufferInputStream  读取的字节由字符串提供
+
+
+
+   byte[] bytes = "ab你".getBytes();
+   System.out.println(Arrays.toString(bytes));
+   //Output: [97, 98, -28, -67, -96]
+
+
+
+//默认为asc升序;  以下为查询倒数2、3条
+select * from apple order by id desc LIMIT 1 2;
+
+
+//解析多行jSon时可能会导致解析异常， 这是可将json转为一行（通过HttpURLConnection获得json）
+
+
+
+//post时很重要
+"Connection": "Keep-Alive"
+//有时Accept请求头很重要
+"Accept":	"*/*"
+
+
+
+  String[] array = new String[] {"zhu", "wen", "tao"};
+    // String数组转List集合
+    List<String> mlist = Arrays.asList(array);
+    //相反List集合转数组
+    String[] strs = mlist.toArray();
+
+
+
+引入synchronized关键字是为了声明临界区，解决在多线程环境下共享变量的数据更改安全问题。那么，一般用到synchronized关键字的地方也就是 在对共享数据 访问或者修改的地方
+
+
+JAVA中静态方法通过类本身可直接调用
+而非静态的通过类的实例化对象调用(从而可实现静态方法中调用非静态方法)
+
+
+
+以下是声明Bean的注解：
+
+    @Component 组件，没有明确的角色
+    @Service 在业务逻辑层使用
+    @Repository 在数据访问层使用
+    @Controller 在展现层使用(MVC -> Spring MVC)使用
+    在这里，可以指定bean的id名：Component(“yourBeanName”)
+    同时，Spring支持将@Named作为@Component注解的替代方案。
+    
+    
+    
+@RequestMapping： 用于提供的请求映射信息。@RequestMapping注解即可以用在class级别中也可以用在方法级别中。
+@ResponseBody： 表示该方法的返回结果直接写入 HTTP response body 中。
+@GetMapping、@PostMapping、@PutMapping等：他们相当于RequestMapping(value = “/xxx” , method = RequestMethod.GET)或 RequestMapping(value = “/xxx” , method = RequestMethod.POST)，即限定请求方法的简写。
+@RestController ：官方文档的描述如下，即@RestController 注解相当于@Controller和@ResponseBody两个注解的组合。 
+
+
+    
+
+
+
+//数据库创建  编码。。查看编码
+show variables like '%char%';
+
+CREATE DATABASE myDatabase DEFAULT CHARACTER SET utf8mb4;
+
+ALTER TABLE comment CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+ALTER TABLE `comment`MODIFY COLUMN `comment`  text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;// 支持表情
+
+
+//复制到远程主机
+scp /home/as_/Desktop/as_.txt root@94.191.31.231:/root/
+//远程复制到本地
+scp root@94.191.31.231:/root/test.txt /home/as_/Desktop/
+
+//Hello,World!
+
+    public static int byteToInt(byte b) {  
+        //Java的byte是有符号，通过 &0xFF转为无符号
+        return b & 0xFF;  
+    }  
+
+
+
+//文件查找
+find ~ -name *abc*
+//用okular打开对应文件
+find -name *a.png* -exec okular {} \;
+//or EyeOfGnome == eog
+
+
+exportr JAVA_HOME=/usr/lib/jvm/jdk-10.0.1
+export JRE_HOME=$JAVA_HOME/jre
+
+
+　　CATALINA_BASE=/usr/local/apache-tomcat-9.0.10 
+　　CATALINA_HOME=/usr/local/apache-tomcat-9.0.10
+　　TOMCAT_HOME=/usr/local/apache-tomcat-9.0.10
+　　export CATALINA_BASE CATALINA_HOME TOMCAT_HOME
+
+ 
