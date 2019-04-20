@@ -2,7 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTextEdit>
 #include <QPlainTextEdit>
+#include<highlighter.h>
 
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
@@ -12,6 +14,21 @@ class QWidget;
 QT_END_NAMESPACE
 
 class LineNumberArea;
+class MainWindow;
+
+class Home: public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    Home();
+
+private:
+    MainWindow *codeEditor;
+    Highlighter *highlighter;
+    void createMenu();
+    void openFileSlot();
+};
 
 class MainWindow : public QPlainTextEdit
 {
@@ -22,6 +39,7 @@ public:
     void hello();
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
+    int getFirstVisibleBlockId();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -55,5 +73,6 @@ protected:
 private:
     MainWindow *mainWindow;
 };
+
 
 #endif // MAINWINDOW_H
