@@ -2,9 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTextEdit>
 #include <QPlainTextEdit>
 #include<highlighter.h>
+#include <QtWidgets>
+
 
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
@@ -14,7 +15,7 @@ class QWidget;
 QT_END_NAMESPACE
 
 class LineNumberArea;
-class MainWindow;
+class CodeEditor;
 
 class Home: public QMainWindow
 {
@@ -23,23 +24,43 @@ class Home: public QMainWindow
 public:
     Home();
 
+
+    void undo();
+    void redo();
+    void copy();
+    void paste();
+
+
+private slots:
+    void updateLengthAndLine();
+    void saveFile();
+    void quit();
+
 private:
-    MainWindow *codeEditor;
+    CodeEditor *codeEditor;
     Highlighter *highlighter;
     void createMenu();
     void openFileSlot();
+
+    // 状态栏文本
+    QLabel *label;
+    QLabel *textType;
+    QLabel *codeLength;
+    QLabel *codeLines;
 };
 
-class MainWindow : public QPlainTextEdit
+class CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = 0);
-    void hello();
+    CodeEditor(Home *parent = 0);
+    void init();
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
     int getFirstVisibleBlockId();
+
+    QString fileName;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -51,13 +72,15 @@ private slots:
 
 private:
     QWidget *lineNumberArea;
+    Home *home;
+
 };
 
 
 class LineNumberArea : public QWidget
 {
 public:
-    LineNumberArea(MainWindow *mainWindow) : QWidget(mainWindow){
+    LineNumberArea(CodeEditor *mainWindow) : QWidget(mainWindow){
         this->mainWindow = mainWindow;
     }
 
@@ -71,7 +94,7 @@ protected:
     }
 
 private:
-    MainWindow *mainWindow;
+    CodeEditor *mainWindow;
 };
 
 
