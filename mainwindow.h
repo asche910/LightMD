@@ -34,7 +34,10 @@ public:
 private slots:
     void updateLengthAndLine();
     void saveFile();
+    void newFile();
     void quit();
+    void about();
+    void checkUpdate();
 
 private:
     CodeEditor *codeEditor;
@@ -61,6 +64,7 @@ public:
     int getFirstVisibleBlockId();
 
     QString fileName;
+    bool isChanged;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

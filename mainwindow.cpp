@@ -25,6 +25,8 @@ Home::Home(): codeEditor(new CodeEditor(this)){
 
     highlighter = new Highlighter(codeEditor->document());
 
+
+    setWindowTitle("new File - LightMD");
     createMenu();
 
 
@@ -202,6 +204,13 @@ void Home::updateLengthAndLine()
 
     QString lines = "Lines:" + QString::number(codeEditor->blockCount());
     codeLines->setText(lines);
+
+    codeEditor->isChanged = true;
+    if(QString::compare("", codeEditor->fileName) == 0){
+        setWindowTitle("*new File - LightMD");
+    }else{
+        setWindowTitle("*" + codeEditor->fileName + " - LightMD");
+    }
 }
 
 void Home::saveFile()
@@ -210,7 +219,9 @@ void Home::saveFile()
     if(file.open(QIODevice::ReadWrite)){
         QTextStream stream(&file);
         stream << codeEditor->document()->toPlainText() << endl;
-        qDebug() << "Success!";
+        qDebug() << "Save success!";
+        codeEditor->isChanged = false;
+        setWindowTitle(codeEditor->fileName + " - LightMD");
     }else {
         qDebug() << "Failed";
 
@@ -233,8 +244,21 @@ void Home::saveFile()
     }
 }
 
+void Home::newFile()
+{
+    setWindowTitle("new File - LightMD");
+    codeEditor->fileName = "";
+    codeEditor->setPlainText("");
+}
+
 void Home::quit()
 {
+    if(codeEditor->isChanged){
+        QMessageBox::StandardButton button = QMessageBox::question(this, windowTitle(),
+                                                                   tr("You have unsaved changes. Do you want to exit anyway?"));
+        if(button != QMessageBox::Yes)
+            return;
+    }
     QApplication::quit();
 }
 
@@ -258,12 +282,23 @@ void Home::paste()
     codeEditor->paste();
 }
 
+void Home::about()
+{
+    QMessageBox::information(this, tr("About"), tr("LightMD by Asche!"));
+}
+
+void Home::checkUpdate()
+{
+    QMessageBox::information(this, tr("Check for updates"), tr("已是最新版本！"));
+}
+
 void Home::createMenu()
 {
     QMenu *menuFile = menuBar()->addMenu(tr("&File"));
 
     QAction *itemNew = new QAction(tr("&New"), this);
     itemNew->setStatusTip(tr("Create a new file"));
+    connect(itemNew, &QAction::triggered, this, &Home::newFile);
     QAction *itemOpen = new QAction(tr("&Open"), this);
     itemOpen->setStatusTip(tr("Open an existing file"));
     connect(itemOpen, &QAction::triggered, this, &Home::openFileSlot);
@@ -316,8 +351,10 @@ void Home::createMenu()
     QMenu *menuHelp = menuBar()->addMenu(tr("&Help"));
     QAction *itemAbout = new QAction(tr("&About"), this);
     itemAbout->setStatusTip(tr("About"));
+    connect(itemAbout, &QAction::triggered, this, &Home::about);
     QAction *itemUpdate = new QAction(tr("&Check for updates"), this);
     itemUpdate->setStatusTip(tr("Check for updates"));
+    connect(itemUpdate, &QAction::triggered, this, &Home::checkUpdate);
 
     menuHelp->addAction(itemAbout);
     menuHelp->addAction(itemUpdate);
@@ -352,6 +389,7 @@ void Home::openFileSlot()
 
 //           qDebug() << file.size() << content;
            codeEditor->setPlainText(content);
+           setWindowTitle(fs[i] + " - LightMD");
        }
     }
 }
