@@ -5,6 +5,9 @@
 #include <QPlainTextEdit>
 #include<highlighter.h>
 #include <QtWidgets>
+#include "previewpage.h"
+#include <QWebEngineView>
+#include "document.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -16,6 +19,7 @@ QT_END_NAMESPACE
 
 class LineNumberArea;
 class CodeEditor;
+class Preview;
 
 class Home: public QMainWindow
 {
@@ -42,6 +46,8 @@ private slots:
 private:
     CodeEditor *codeEditor;
     Highlighter *highlighter;
+    Preview *preview;
+    Document m_content;
     void createMenu();
     void openFileSlot();
 
@@ -101,5 +107,14 @@ private:
     CodeEditor *mainWindow;
 };
 
+
+class Preview : public QWebEngineView
+{
+public:
+    Preview(Home *parent);
+
+private:
+    Home *home;
+};
 
 #endif // MAINWINDOW_H

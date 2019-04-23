@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += webenginewidgets webchannel
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,11 +28,18 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-        highlighter.cpp
+        highlighter.cpp \
+    document.cpp \
+    previewpage.cpp
 
 HEADERS += \
         mainwindow.h \
-        highlighter.h
+        highlighter.h \
+    previewpage.h \
+    document.h
+
+RESOURCES = \
+    resources/markdowneditor.qrc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

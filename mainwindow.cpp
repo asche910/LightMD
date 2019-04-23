@@ -1,9 +1,11 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QtWidgets>
+#include <QWebChannel>
+#include <QWebEnginePage>
 #include "mainwindow.h"
 
-Home::Home(): codeEditor(new CodeEditor(this)){
+Home::Home(): codeEditor(new CodeEditor(this)), preview(new Preview(this)){
 //    QWidget *centralWindow = new QWidget;
 //    setCentralWidget(centralWindow);
 
@@ -16,11 +18,35 @@ Home::Home(): codeEditor(new CodeEditor(this)){
 //    w.show();
 
     resize(QSize(800, 600));
+//    preview = new QWebEngineView();
+
+
+    PreviewPage *enginePage = new PreviewPage(this);
+    preview->setPage(enginePage);
+    preview->setContextMenuPolicy(Qt::NoContextMenu);
+
+    connect(codeEditor, &QPlainTextEdit::textChanged,
+            [this](){ m_content.setText(codeEditor->toPlainText()); } );
+
+    QWebChannel *channel = new QWebChannel(this);
+    channel->registerObject(QStringLiteral("content"), &m_content);
+    enginePage->setWebChannel(channel);
+
+
+    preview->setHtml("<html><body><h1>Hello, World!</h1></body></html>");
+//    preview->setContent("<html><body><h1>Hello, World!</h1></body></html>");
+
+    preview->setUrl(QUrl("qrc:/index.html"));
+
 
     QSplitter *centralSplitter = new QSplitter(this);
+
     setCentralWidget(centralSplitter);
 
     centralSplitter->addWidget(codeEditor);
+    centralSplitter->addWidget(preview);
+
+
 
 
     highlighter = new Highlighter(codeEditor->document());
@@ -227,9 +253,7 @@ void Home::saveFile()
 
 
         QString fileName = QFileDialog::getSaveFileName(this,
-                tr("文件另存为"),
-                "",
-                tr("Config Files (*.txt)"));
+                                tr("Save file"), "", tr("Save type(*)"));
         codeEditor->fileName = fileName;
 
         qDebug() << fileName << endl;
@@ -394,3 +418,7 @@ void Home::openFileSlot()
     }
 }
 
+Preview::Preview(Home *parent)
+{
+    home = parent;
+}
