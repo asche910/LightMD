@@ -46,6 +46,10 @@ Home::Home(): codeEditor(new CodeEditor(this)), preview(new Preview(this)){
     centralSplitter->addWidget(codeEditor);
     centralSplitter->addWidget(preview);
 
+//    preview->setVisible(false);
+
+    centralSplitter->setStretchFactor(0, 15);
+    centralSplitter->setStretchFactor(1, 3);
 
 
 
@@ -102,7 +106,6 @@ CodeEditor::CodeEditor(Home *parent)
 //    setCentralWidget(okBtn);
 
 
-
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(hightlightCurrentLine()));
@@ -152,7 +155,15 @@ int CodeEditor::lineNumberAreaWidth()
 
 void CodeEditor::updateLineNumberAreaWidth(int)
 {
-    setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
+//    if(home->menuView->actions().at(2)->isChecked())
+    if(home->menuView == nullptr)
+        qDebug() << "NULL";
+    else
+        qDebug() << "Not NULL";
+
+    if(home->menuView == nullptr || home->menuView->actions().at(2)->isChecked()){
+        setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
+    }
 }
 
 void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
@@ -164,6 +175,11 @@ void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 
     if(rect.contains(viewport()->rect()))
         updateLineNumberAreaWidth(0);
+}
+
+void CodeEditor::hideLineNumber()
+{
+    setViewportMargins(0, 0, 0, 0);
 }
 
 void CodeEditor::resizeEvent(QResizeEvent *e)
@@ -306,6 +322,31 @@ void Home::paste()
     codeEditor->paste();
 }
 
+void Home::handleMenuView()
+{
+    qDebug() << "-------->";
+    QList<QAction*> actions = menuView->actions();
+
+    if(actions.at(0)->isChecked()){
+        preview->setVisible(true);
+    }else{
+        preview->setVisible(false);
+    }
+
+    if(actions.at(1)->isChecked()){
+
+    }
+
+    // 代码行数
+    if(actions.at(2)->isChecked()){
+        codeEditor->lineNumberArea->setVisible(true);
+        codeEditor->updateLineNumberAreaWidth(0);
+    }else{
+        codeEditor->lineNumberArea->setVisible(false);
+        codeEditor->hideLineNumber();
+    }
+}
+
 void Home::about()
 {
     QMessageBox::information(this, tr("About"), tr("LightMD by Asche!"));
@@ -363,12 +404,25 @@ void Home::createMenu()
     menuEdit->addAction(itemCopy);
     menuEdit->addAction(itemPaste);
 
-    QMenu *menuView = menuBar()->addMenu(tr("&View"));
+    menuView = menuBar()->addMenu(tr("&View")); // menuView 放置到主类，以利于处理check的点击事件
+    QAction *itemMDPreview = new QAction(tr("&MarkDown Preview"), this);
+    itemMDPreview->setStatusTip(tr("Show MarkDown preview"));
+    itemMDPreview->setCheckable(true);
+    itemMDPreview->setChecked(true);
+    connect(itemMDPreview, SIGNAL(triggered()), this, SLOT(handleMenuView()));
     QAction *itemToolbar = new QAction(tr("&Toolbar"), this);
     itemToolbar->setStatusTip(tr("Show toolbar"));
+    itemToolbar->setCheckable(true);
+    itemToolbar->setChecked(true);
+    connect(itemToolbar,SIGNAL(triggered()), this, SLOT(handleMenuView()));
     QAction *itemLineNum = new QAction(tr("&LineNumber"), this);
     itemLineNum->setStatusTip(tr("Show LineNumber"));
+    itemLineNum->setCheckable(true);
+    itemLineNum->setChecked(true);
+    connect(itemLineNum, SIGNAL(triggered()), this, SLOT(handleMenuView()));
 
+
+    menuView->addAction(itemMDPreview);
     menuView->addAction(itemToolbar);
     menuView->addAction(itemLineNum);
 

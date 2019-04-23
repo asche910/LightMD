@@ -34,12 +34,14 @@ public:
     void copy();
     void paste();
 
+    QMenu *menuView;
 
 private slots:
     void updateLengthAndLine();
     void saveFile();
     void newFile();
     void quit();
+    void handleMenuView();
     void about();
     void checkUpdate();
 
@@ -56,6 +58,7 @@ private:
     QLabel *textType;
     QLabel *codeLength;
     QLabel *codeLines;
+
 };
 
 class CodeEditor : public QPlainTextEdit
@@ -69,19 +72,20 @@ public:
     int lineNumberAreaWidth();
     int getFirstVisibleBlockId();
 
+    QWidget *lineNumberArea;
     QString fileName;
     bool isChanged;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
-private slots:
+public slots:
     void updateLineNumberAreaWidth(int newBolckCount);
     void hightlightCurrentLine();
     void updateLineNumberArea(const QRect &, int);
+    void hideLineNumber();
 
 private:
-    QWidget *lineNumberArea;
     Home *home;
 
 };
