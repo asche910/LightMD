@@ -10,3 +10,5 @@ The conversion from Markdown to HTML is done with the help of the
 [marked JavaScript library](https://github.com/chjj/marked) by _Christopher Jeffrey_.
 The [style sheet](https://kevinburke.bitbucket.io/markdowncss/)
 was created by _Kevin Burke_.
+
+n Burke_.
